@@ -1,0 +1,8 @@
+{
+  "Variables": {
+    "AUSERVER": "https://tools.google.com/service/update2",
+    "TABLE_NAME": "cros-updates",
+    "TOPIC_ARN": "arn:aws:sns:us-west-2:246745595609:cros-updates",
+    "CHROMEBOOKS_JSON": null
+  }
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "appid": "{92A7272A-834A-47A3-9112-E8FD55831660}",
+    "track": "stable-channel",
+    "board": "kevin-signed-mpkeys",
+    "hardware_class": "KEVIN D25-A3E-B2A-O8Y"
+  },
+  {
+    "appid": "{BD7F7139-CC18-49C1-A847-33F155CCBCA8}",
+    "track": "stable-channel",
+    "board": "nocturne-signed-mpkeys",
+    "hardware_class": "NOCTURNE D5B-A5F-B47-H6A-A5L"
+  }
+]
