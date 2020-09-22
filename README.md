@@ -1,6 +1,8 @@
 # cros-updates
 Notify of Chrome OS Updates
 
+**Note:** Google broke this around 2pm Pacific on September 22, 2020 by removing the meta-data from the response. Back to log diving until I can figure out what they're doing now!
+
 ## Overview
 This project contains a module and AWS Lambda function that notifies me
 whenever Google pushes an update to one of my Chromebooks. It does this by
