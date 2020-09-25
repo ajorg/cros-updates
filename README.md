@@ -1,7 +1,8 @@
 # cros-updates
 Notify of Chrome OS Updates
 
-**Note:** Google broke this around 2pm Pacific on September 22, 2020 by removing the meta-data from the response. Back to log diving until I can figure out what they're doing now!
+**Update:** Google broke this around 2pm Pacific on September 22, 2020 by removing most of the meta-data from the response.
+I've temporarily moved this to using the Chrome OS version instead of the Chrome version. It doesn't tell the same story, but at least it works.
 
 ## Overview
 This project contains a module and AWS Lambda function that notifies me
