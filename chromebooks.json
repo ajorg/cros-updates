@@ -1,5 +1,11 @@
 [
   {
+    "appid": "{F1C30EB2-8429-4A18-9321-93E224753A98}",
+    "track": "stable-channel",
+    "board": "scarlet-signed-mp-v7keys",
+    "hardware_class": "SCARLET C6B-A2C-C3V-G7M-I9I"
+  },
+  {
     "appid": "{92A7272A-834A-47A3-9112-E8FD55831660}",
     "track": "stable-channel",
     "board": "kevin-signed-mpkeys",
