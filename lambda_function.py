@@ -33,6 +33,7 @@ from os import environ
 from urllib.request import urlopen
 from xml.etree import ElementTree
 import json
+import re
 
 import boto3
 
@@ -74,6 +75,18 @@ if __name__ != "__main__":
     )
     TOPIC = boto3.resource("sns").Topic(TOPIC_ARN)
 
+# Get chromebook names from the recovery table
+with urlopen(
+    "https://dl.google.com/dl/edgedl/chromeos/recovery/recovery2.json"
+) as RECOVERY2_JSON:
+    RECOVERY = json.load(RECOVERY2_JSON)
+
+for CHROMEBOOK in CHROMEBOOKS:
+    for RECORD in RECOVERY:
+        if re.fullmatch(RECORD["hwidmatch"], CHROMEBOOK["hardware_class"]):
+            CHROMEBOOK["name"] = RECORD["name"]
+            break
+                
 
 def chrome_version(appid, track, board, hardware_class):
     """Get the Chrome version for a Chromebook"""
@@ -101,9 +114,19 @@ def lambda_handler(event, context):
         )
         print(json.dumps(item.get("Item"), sort_keys=True))
         item = item.get("Item", chromebook)
-        version = chrome_version(**chromebook)
+        version = chrome_version(
+            **(
+                {
+                    k: chromebook[k]
+                    for k in ("appid", "track", "board", "hardware_class")
+                }
+            )
+        )
+        name = chromebook.get(
+            "name", chromebook["hardware_class"].split()[0].lower().capitalize()
+        )
+        print(json.dumps({"name": name, "version": version}))
         if version != item.get("version"):
-            name = chromebook["hardware_class"].split()[0].lower().capitalize()
             message = "{name} updated to {version}".format(name=name, version=version)
             TOPIC.publish(Message=message)
             print(json.dumps({"Message": message}))
