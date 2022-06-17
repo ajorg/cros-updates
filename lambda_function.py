@@ -141,4 +141,15 @@ def lambda_handler(event, context):
 
 if __name__ == "__main__":
     for chromebook in CHROMEBOOKS:
-        print(chrome_version(**chromebook))
+        version = chrome_version(
+            **(
+                {
+                    k: chromebook[k]
+                    for k in ("appid", "track", "board", "hardware_class")
+                }
+            )
+        )
+        name = chromebook.get(
+            "name", chromebook["hardware_class"].split()[0].lower().capitalize()
+        )
+        print(f"{name} updated to {version}")
