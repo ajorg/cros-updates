@@ -46,7 +46,7 @@ REQUEST = """<?xml version="1.0" encoding="UTF-8"?>
   </app>
 </request>"""
 VERSION_ATTRIB = "version"
-VERSION_XPATH = ".//manifest[@{}]".format(VERSION_ATTRIB)
+VERSION_XPATH = f".//manifest[@{VERSION_ATTRIB}]"
 
 # Default this to something valid for testing
 CHROMEBOOKS_JSON = (
@@ -127,7 +127,7 @@ def lambda_handler(event, context):
         )
         print(json.dumps({"name": name, "version": version}))
         if version != item.get("version"):
-            message = "{name} updated to {version}".format(name=name, version=version)
+            message = f"{name} updated to {version}"
             TOPIC.publish(Message=message)
             print(json.dumps({"Message": message}))
 
