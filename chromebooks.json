@@ -16,5 +16,18 @@
     "track": "stable-channel",
     "board": "nocturne-signed-mpkeys",
     "hardware_class": "NOCTURNE D5B-A5F-B47-H6A-A5L"
+  },
+  {
+    "appid": "{95EE134E-B47F-43FB-9835-32C276865F9A}",
+    "track": "stable-channel",
+    "board": "hatch-signed-mp-v6keys",
+    "hardware_class": "KOHAKU-JPZQ C5B-B4B-B4Q-H9A-A3D"
+  },
+  {
+    "appid": "{C924E0C4-AF80-4B6B-A6F0-DD75EDBCC37C}",
+    "track": "stable-channel",
+    "board": "reven-signed-mp-v2keys",
+    "hardware_class": "REVEN-ANAE A6A-A7I"
   }
+
 ]
