@@ -76,17 +76,20 @@ if __name__ != "__main__":
     TOPIC = boto3.resource("sns").Topic(TOPIC_ARN)
 
 # Get chromebook names from the recovery table
-with urlopen(
-    "https://dl.google.com/dl/edgedl/chromeos/recovery/recovery2.json"
-) as RECOVERY2_JSON:
-    RECOVERY = json.load(RECOVERY2_JSON)
+RECOVERY = []
+for url in (
+    "https://dl.google.com/dl/edgedl/chromeos/recovery/recovery2.json",
+    "https://dl.google.com/dl/edgedl/chromeos/recovery/cloudready_recovery2.json",
+):
+    with urlopen(url) as RECOVERY2_JSON:
+        RECOVERY.extend(json.load(RECOVERY2_JSON))
 
 for CHROMEBOOK in CHROMEBOOKS:
     for RECORD in RECOVERY:
         if re.fullmatch(RECORD["hwidmatch"], CHROMEBOOK["hardware_class"]):
             CHROMEBOOK["name"] = RECORD["name"]
             break
-                
+
 
 def chrome_version(appid, track, board, hardware_class):
     """Get the Chrome version for a Chromebook"""
