@@ -45,8 +45,8 @@ REQUEST = """<?xml version="1.0" encoding="UTF-8"?>
     <updatecheck/>
   </app>
 </request>"""
-VERSION_ATTRIB = "version"
-VERSION_XPATH = f".//manifest[@{VERSION_ATTRIB}]"
+VERSION_ATTRIB = "ChromeVersion"
+VERSION_XPATH = f".//action[@{VERSION_ATTRIB}]"
 
 # Default this to something valid for testing
 CHROMEBOOKS_JSON = (
