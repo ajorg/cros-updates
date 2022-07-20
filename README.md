@@ -1,8 +1,10 @@
 # cros-updates
 Notify of Chrome OS Updates
 
-**Update:** Google broke this around 2pm Pacific on September 22, 2020 by removing most of the meta-data from the response.
-I've temporarily moved this to using the Chrome OS version instead of the Chrome version. It doesn't tell the same story, but at least it works.
+**Update:** The Chrome version is back in the metadata, and I've added a feature to lookup the product name so that updates come as `Samsung Galaxy Chromebook updated to 103.0.5060.132` instead of `Kohaku-jpzq updated to 14816.131.0`.
+
+~~**Update:** Google broke this around 2pm Pacific on September 22, 2020 by removing most of the metadata from the response.
+I've temporarily moved this to using the Chrome OS version instead of the Chrome version. It doesn't tell the same story, but at least it works.~~
 
 ## Overview
 This project contains a module and AWS Lambda function that notifies me
