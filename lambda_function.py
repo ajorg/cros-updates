@@ -129,8 +129,10 @@ def lambda_handler(event, context):
             "name", chromebook["hardware_class"].split()[0].lower().capitalize()
         )
         print(json.dumps({"name": name, "version": version}))
-        if version != item.get("version"):
-            message = f"{name} updated to {version}"
+
+        old_version = item.get("version")
+        if version != old_version:
+            message = f"{name} updated to {version} from {old_version}"
             TOPIC.publish(Message=message)
             print(json.dumps({"Message": message}))
 
