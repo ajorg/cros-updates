@@ -135,6 +135,7 @@ def lambda_handler(event, context):
             print(json.dumps({"Message": message}))
 
             item["version"] = version
+            item["name"] = name
             print(json.dumps(item, sort_keys=True))
             TABLE.put_item(Item=item)
 
