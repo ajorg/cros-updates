@@ -132,7 +132,7 @@ def lambda_handler(event, context):
 
         old_version = item.get("version")
         if version != old_version:
-            message = f"{name} updated to {version} from {old_version}"
+            message = f"{name} updated from {old_version} to {version}"
             TOPIC.publish(Message=message)
             print(json.dumps({"Message": message}))
 
