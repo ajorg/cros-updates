@@ -1,5 +1,23 @@
 [
   {
+    "appid": "{DEB6CEFD-4EEE-462F-AC21-52DF1E17B52F}",
+    "track": "stable-channel",
+    "board": "brya-signed-mp-v9keys",
+    "hardware_class": "REDRIX-CLQY D5B-H5G-F4F-W2B-R5A-I6A-A2Y"
+  },
+  {
+    "appid": "{95EE134E-B47F-43FB-9835-32C276865F9A}",
+    "track": "stable-channel",
+    "board": "hatch-signed-mp-v6keys",
+    "hardware_class": "JINLON-YTGY C5B-M5B-E4E-J5Q-E5R"
+  },
+  {
+    "appid": "{95EE134E-B47F-43FB-9835-32C276865F9A}",
+    "track": "stable-channel",
+    "board": "hatch-signed-mp-v6keys",
+    "hardware_class": "KOHAKU-JPZQ C5B-B4B-B4Q-H9A-A3D"
+  },
+  {
     "appid": "{F1C30EB2-8429-4A18-9321-93E224753A98}",
     "track": "stable-channel",
     "board": "scarlet-signed-mp-v7keys",
@@ -18,16 +36,9 @@
     "hardware_class": "NOCTURNE D5B-A5F-B47-H6A-A5L"
   },
   {
-    "appid": "{95EE134E-B47F-43FB-9835-32C276865F9A}",
-    "track": "stable-channel",
-    "board": "hatch-signed-mp-v6keys",
-    "hardware_class": "KOHAKU-JPZQ C5B-B4B-B4Q-H9A-A3D"
-  },
-  {
     "appid": "{C924E0C4-AF80-4B6B-A6F0-DD75EDBCC37C}",
     "track": "stable-channel",
     "board": "reven-signed-mp-v2keys",
     "hardware_class": "REVEN-ANAE A6A-A7I"
   }
-
 ]
