@@ -32,6 +32,7 @@ from os import environ
 # requests is neat and trendy, but it's not in the standard library, so...
 from urllib.request import urlopen
 from xml.etree import ElementTree
+from datetime import date
 import json
 import re
 
@@ -47,6 +48,9 @@ REQUEST = """<?xml version="1.0" encoding="UTF-8"?>
 </request>"""
 VERSION_ATTRIB = "ChromeVersion"
 VERSION_XPATH = f".//action[@{VERSION_ATTRIB}]"
+EOL_ATTRIB = "_eol_date"
+EOL_XPATH = f".//updatecheck[@{EOL_ATTRIB}]"
+SECONDS_IN_DAY = 24 * 60 * 60
 
 # Default this to something valid for testing
 CHROMEBOOKS_JSON = (
@@ -57,6 +61,12 @@ CHROMEBOOKS_JSON = (
     "track": "stable-channel",
     "board": "kevin-signed-mpkeys",
     "hardware_class": "KEVIN D25-A3E-B2A-O8Y"
+  },
+  {
+    "appid": "{C924E0C4-AF80-4B6B-A6F0-DD75EDBCC37C}",
+    "track": "stable-channel",
+    "board": "reven-signed-mp-v2keys",
+    "hardware_class": "REVEN-ANAE A6A-A7I"
   }
 ]"""
 )
@@ -91,8 +101,7 @@ for CHROMEBOOK in CHROMEBOOKS:
             break
 
 
-def chrome_version(appid, track, board, hardware_class):
-    """Get the Chrome version for a Chromebook"""
+def request_update(appid, track, board, hardware_class):
     request = REQUEST.format(
         appid=appid, track=track, board=board, hardware_class=hardware_class
     )
@@ -101,10 +110,31 @@ def chrome_version(appid, track, board, hardware_class):
     with urlopen(AUSERVER, data=request.encode()) as response:
         data = response.read()
         print(json.dumps({"Response": data.decode(), "Status": response.status}))
-        root = ElementTree.fromstring(data)
 
-    for action in root.findall(VERSION_XPATH):
-        return action.attrib[VERSION_ATTRIB]
+    return UpdateResponse(data)
+
+
+class UpdateResponse:
+    """Representation of a chromeOS update response"""
+
+    def __init__(self, data):
+        self._root = ElementTree.fromstring(data)
+
+    @property
+    def version(self):
+        """Get the Chrome version for a chromeOS device"""
+        for element in self._root.findall(VERSION_XPATH):
+            return element.attrib[VERSION_ATTRIB]
+
+    @property
+    def eol(self):
+        """Get the EOL date for a chromeOS device"""
+        try:
+            element = self._root.find(EOL_XPATH)
+            _eol_date = element.attrib[EOL_ATTRIB]
+        except AttributeError:
+            return None
+        return date.fromtimestamp(int(_eol_date) * SECONDS_IN_DAY)
 
 
 def lambda_handler(event, context):
@@ -117,7 +147,7 @@ def lambda_handler(event, context):
         )
         print(json.dumps(item.get("Item"), sort_keys=True))
         item = item.get("Item", chromebook)
-        version = chrome_version(
+        response = request_update(
             **(
                 {
                     k: chromebook[k]
@@ -125,18 +155,26 @@ def lambda_handler(event, context):
                 }
             )
         )
+
         name = chromebook.get(
             "name", chromebook["hardware_class"].split()[0].lower().capitalize()
         )
-        print(json.dumps({"name": name, "version": version}))
+        print(
+            json.dumps(
+                {"name": name, "version": response.version, "eol": str(response.eol)}
+            )
+        )
 
         old_version = item.get("version")
-        if version != old_version:
-            message = f"{name} updated from {old_version} to {version}"
+        if response.version != old_version:
+            message = f"{name} updated from {old_version} to {response.version}"
+            if response.eol:
+                eol = response.eol.strftime("%B %Y")
+                message += f" and supported until {eol}"
             TOPIC.publish(Message=message)
             print(json.dumps({"Message": message}))
 
-            item["version"] = version
+            item["version"] = response.version
             item["name"] = name
             print(json.dumps(item, sort_keys=True))
             TABLE.put_item(Item=item)
@@ -144,7 +182,7 @@ def lambda_handler(event, context):
 
 if __name__ == "__main__":
     for chromebook in CHROMEBOOKS:
-        version = chrome_version(
+        response = request_update(
             **(
                 {
                     k: chromebook[k]
@@ -155,4 +193,14 @@ if __name__ == "__main__":
         name = chromebook.get(
             "name", chromebook["hardware_class"].split()[0].lower().capitalize()
         )
-        print(f"{name} updated to {version}")
+        print(
+            json.dumps(
+                {"name": name, "version": response.version, "eol": str(response.eol)}
+            )
+        )
+
+        message = f"{name} updated to {response.version}"
+        if response.eol:
+            eol = response.eol.strftime("%B %Y")
+            message += f" and supported until {eol}"
+        print(message)
